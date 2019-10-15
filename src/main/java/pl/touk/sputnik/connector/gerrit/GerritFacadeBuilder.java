@@ -47,7 +47,18 @@ public class GerritFacadeBuilder {
 
         CommentFilter commentFilter = buildCommentFilter(configuration, gerritPatchset, gerritApi);
 
-        return new GerritFacade(gerritApi, gerritPatchset, commentFilter);
+        GerritScoreLabeler scoreLabeler = scoreLabeler(configuration);
+        ReviewInputBuilder reviewInputBuilder = new ReviewInputBuilder(commentFilter, scoreLabeler);
+        return new GerritFacade(gerritApi, gerritPatchset, reviewInputBuilder);
+    }
+
+    @NotNull
+    private GerritScoreLabeler scoreLabeler(Configuration configuration) {
+        String scorePassingKey = configuration.getProperty(GeneralOption.SCORE_PASSING_KEY);
+        String scoreFailingKey = configuration.getProperty(GeneralOption.SCORE_FAILING_KEY);
+        short scorePassingValue = Short.valueOf(configuration.getProperty(GeneralOption.SCORE_PASSING_VALUE));
+        short scoreFailingValue = Short.valueOf(configuration.getProperty(GeneralOption.SCORE_FAILING_VALUE));
+        return new GerritScoreLabeler(scorePassingKey, scoreFailingKey, scorePassingValue, scoreFailingValue);
     }
 
     @NotNull

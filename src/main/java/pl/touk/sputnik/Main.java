@@ -14,6 +14,7 @@ import pl.touk.sputnik.connector.ConnectorFacade;
 import pl.touk.sputnik.connector.ConnectorFacadeFactory;
 import pl.touk.sputnik.connector.ConnectorType;
 import pl.touk.sputnik.engine.Engine;
+import pl.touk.sputnik.engine.score.Score;
 
 public final class Main {
     private static final String SPUTNIK = "sputnik";
@@ -38,7 +39,10 @@ public final class Main {
         configuration.updateWithCliOptions(commandLine);
 
         ConnectorFacade facade = getConnectorFacade(configuration);
-        new Engine(facade, facade, configuration).run();
+        Score runResult = new Engine(facade, facade, configuration).run();
+        if (runResult == Score.FAIL) {
+            System.exit(1);
+        }
     }
 
     private static ConnectorFacade getConnectorFacade(Configuration configuration) {

@@ -1,4 +1,4 @@
-package pl.touk.sputnik.engine.visitor.score;
+package pl.touk.sputnik.engine.score;
 
 import org.junit.jupiter.api.Test;
 import pl.touk.sputnik.TestEnvironment;
@@ -12,8 +12,13 @@ class NoScoreTest extends TestEnvironment {
     void shouldAddNoScoreToReview() {
         Review review = review();
 
-        new NoScore().afterReview(review);
+        Score score = new NoScore().score(review);
 
-        assertThat(review.getScores()).isEmpty();
+        assertThat(score).isNull();
+    }
+
+    @Test
+    public void athateh() {
+        System.out.println(new Score("1", 1));
     }
 }

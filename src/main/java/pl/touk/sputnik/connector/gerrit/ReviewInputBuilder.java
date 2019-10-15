@@ -11,8 +11,8 @@ import pl.touk.sputnik.review.Comment;
 import pl.touk.sputnik.review.Review;
 import pl.touk.sputnik.review.ReviewFile;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -22,12 +22,14 @@ public class ReviewInputBuilder {
     private static final String MESSAGE_SEPARATOR = ". ";
 
     private final CommentFilter commentFilter;
+    private final GerritScoreLabeler scoreLabeler;
 
     @NotNull
     public ReviewInput toReviewInput(@NotNull Review review, @Nullable String tag) {
         ReviewInput reviewInput = new ReviewInput();
         reviewInput.message = Joiner.on(MESSAGE_SEPARATOR).join(review.getMessages());
-        reviewInput.labels = new HashMap<>(review.getScores());
+        Map<String, Short> reviewLabel = scoreLabeler.getReviewLabel(review.getScore());
+        reviewInput.labels = reviewLabel;
         if (StringUtils.isNotBlank(tag)) {
             reviewInput.tag = tag;
         }

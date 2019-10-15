@@ -1,6 +1,7 @@
 package pl.touk.sputnik;
 
 import pl.touk.sputnik.configuration.Configuration;
+import pl.touk.sputnik.engine.score.Score;
 import pl.touk.sputnik.review.Comment;
 import pl.touk.sputnik.review.Review;
 import pl.touk.sputnik.review.ReviewFile;
@@ -16,7 +17,7 @@ public class ReviewBuilder {
         Review review = new Review(reviewFiles, ReviewFormatterFactory.get(configuration));
         review.setTotalViolationCount(8);
         review.getMessages().add("Total 8 violations found");
-        review.getScores().put("Code-Review", (short) 1);
+        review.setScore(new Score("Code-Review", 1));
         return review;
     }
 

@@ -39,7 +39,7 @@ class ReviewInputBuilderTest {
         Review review = ReviewBuilder.buildReview(config);
         when(commentFilter.include(eq("filename1"), anyInt())).thenReturn(true);
 
-        ReviewInput reviewInput = reviewInputBuilder.toReviewInput(review, TAG);
+        ReviewInput reviewInput = reviewInputBuilder.toReviewInput(review);
 
         assertThat(reviewInput.message).isEqualTo("Total 8 violations found");
         assertThat(reviewInput.comments).hasSize(4);
@@ -56,7 +56,7 @@ class ReviewInputBuilderTest {
         when(commentFilter.include("filename1", 0)).thenReturn(false);
         when(commentFilter.include("filename1", 1)).thenReturn(true);
 
-        ReviewInput reviewInput = reviewInputBuilder.toReviewInput(review, TAG);
+        ReviewInput reviewInput = reviewInputBuilder.toReviewInput(review);
 
         assertThat(reviewInput.message).isEqualTo("Total 8 violations found");
         assertThat(reviewInput.comments).hasSize(4);
@@ -72,7 +72,7 @@ class ReviewInputBuilderTest {
         Configuration config = ConfigurationBuilder.initFromResource("test.properties");
         Review review = ReviewBuilder.buildReview(config);
 
-        ReviewInput reviewInput = reviewInputBuilder.toReviewInput(review, tag);
+        ReviewInput reviewInput = reviewInputBuilder.toReviewInput(review);
 
         assertThat(reviewInput.tag).isNull();
     }
