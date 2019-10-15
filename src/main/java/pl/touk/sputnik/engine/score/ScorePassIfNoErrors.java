@@ -1,32 +1,30 @@
-package pl.touk.sputnik.engine.visitor.score;
+package pl.touk.sputnik.engine.score;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import pl.touk.sputnik.engine.visitor.AfterReviewVisitor;
 import pl.touk.sputnik.review.Review;
 import pl.touk.sputnik.review.Severity;
 
-import java.util.Map;
-
 @Slf4j
 @Getter
+@EqualsAndHashCode
 @AllArgsConstructor
-public class ScorePassIfNoErrors implements AfterReviewVisitor {
-    private final Map<String, Short> passingScore;
-    private final Map<String, Short> failingScore;
+public class ScorePassIfNoErrors implements ScoreStrategy {
+    private final Score passingScore;
+    private final Score failingScore;
 
     @Override
-    public void afterReview(@NotNull Review review) {
+    public Score score(@NotNull Review review) {
         Integer errorCount = review.getViolationCount().get(Severity.ERROR);
         if (errorCount == null || errorCount == 0) {
             log.info("Adding passing score {} for no errors found", passingScore);
-            review.setScores(passingScore);
-            return;
+            return passingScore;
         }
 
         log.info("Adding failing score {} for {} errors found", failingScore, errorCount);
-        review.setScores(failingScore);
+        return failingScore;
     }
 }

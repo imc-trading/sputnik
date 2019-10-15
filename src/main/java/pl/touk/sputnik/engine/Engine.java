@@ -6,6 +6,9 @@ import pl.touk.sputnik.connector.ConnectorFacade;
 import pl.touk.sputnik.connector.ReviewPublisher;
 import pl.touk.sputnik.engine.visitor.AfterReviewVisitor;
 import pl.touk.sputnik.engine.visitor.BeforeReviewVisitor;
+import pl.touk.sputnik.engine.score.ScoreStrategy;
+import pl.touk.sputnik.engine.score.ScoreStrategyFactory;
+import pl.touk.sputnik.engine.score.Score;
 import pl.touk.sputnik.review.Review;
 import pl.touk.sputnik.review.ReviewFile;
 import pl.touk.sputnik.review.ReviewFormatterFactory;
@@ -26,7 +29,7 @@ public class Engine {
         this.config = configuration;
     }
 
-    public void run() {
+    public Score run() {
         List<ReviewFile> reviewFiles = facade.listFiles();
         Review review = new Review(reviewFiles, ReviewFormatterFactory.get(config));
 
@@ -44,6 +47,11 @@ public class Engine {
             afterReviewVisitor.afterReview(review);
         }
 
+        ScoreStrategy scoreStrategy = new ScoreStrategyFactory().buildScoreStrategy(config);
+        Score score = scoreStrategy.score(review);
+        review.setScore(score);
         reviewPublisher.publish(review);
+
+        return score;
     }
 }

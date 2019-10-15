@@ -9,12 +9,12 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pl.touk.sputnik.engine.score.Score;
 import pl.touk.sputnik.review.filter.FileFilter;
 import pl.touk.sputnik.review.transformer.FileTransformer;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +38,7 @@ public class Review {
      * Messages that will be displayed on review summary with your code-review tool
      */
     private List<String> messages = new ArrayList<>();
-    private Map<String, Short> scores = new HashMap<>();
+    private Score score;
 
     private final ReviewFormatter formatter;
 

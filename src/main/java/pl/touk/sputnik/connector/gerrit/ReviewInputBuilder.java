@@ -11,6 +11,8 @@ import pl.touk.sputnik.review.Comment;
 import pl.touk.sputnik.review.Review;
 import pl.touk.sputnik.review.ReviewFile;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +29,9 @@ public class ReviewInputBuilder {
     public ReviewInput toReviewInput(@NotNull Review review, @Nullable String tag) {
         ReviewInput reviewInput = new ReviewInput();
         reviewInput.message = Joiner.on(MESSAGE_SEPARATOR).join(review.getMessages());
-        reviewInput.labels = new HashMap<>(review.getScores());
+        reviewInput.labels = review.getScore() == null
+                ? Collections.emptyMap()
+                : Collections.singletonMap(review.getScore().getLabel(), (short) review.getScore().getScore());
         if (StringUtils.isNotBlank(tag)) {
             reviewInput.tag = tag;
         }
